@@ -5,14 +5,24 @@ pub mod sentiment {
     use std::io::{self, BufReader};
     use std::path::Path;
 
-
     pub struct Analizer {
         wordlist: HashMap<String, i8>
     }
 
     impl Analizer {
         pub fn analyze(self, s: &str) -> f32 {
-            return 0.0;
+            let tokens = s.split(" ");
+            let word_count = tokens.clone().count();
+
+            let score = tokens
+                .map(|word| word.to_string().to_lowercase())
+                .map(|word| match self.wordlist.get(&word) {
+                    Some(word_score) => *word_score,
+                    None => 0 as i8,
+                })
+                .fold(0, |sum, curr| sum+curr );
+
+            return score as f32 / word_count as f32;
         }
     }
 
@@ -36,7 +46,6 @@ pub mod sentiment {
             wordlist.insert(word, score);
         }
 
-        println!("{:?}", wordlist);
         return Analizer {
             wordlist: wordlist
         }
