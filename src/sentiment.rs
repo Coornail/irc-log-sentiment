@@ -2,15 +2,14 @@ pub mod sentiment {
     use std::collections::HashMap;
     use std::fs::File;
     use std::io::prelude::*;
-    use std::io::{self, BufReader};
-    use std::path::Path;
+    use std::io::BufReader;
 
     pub struct Analizer {
         wordlist: HashMap<String, i8>
     }
 
     impl Analizer {
-        pub fn analyze(self, s: &str) -> f32 {
+        pub fn analyze(&self, s: &str) -> f32 {
             let tokens = s.split(" ");
             let word_count = tokens.clone().count();
 
@@ -29,7 +28,7 @@ pub mod sentiment {
     pub fn new(path: String) -> Analizer {
         let mut wordlist = HashMap::new();
 
-        let mut f = match File::open(&path) {
+        let f = match File::open(&path) {
             Err(why) => panic!("couldn't open {}: {}", path, why),
             Ok(f) => f,
         };
@@ -58,13 +57,11 @@ mod test {
 
     #[test]
     fn sentiment_test() {
-        /*
-           analyze("I am happy"); //Score: 3, Comparative: 1
-           analyze("I am so happy"); //Score: 6, Comparative: 1.5
-           analyze("I am extremely happy"); //Score: 12, Comparative: 3
-           analyze("I am really sad"); //Score: -4, Comparative: -1
-*/
-        let mut analizer = sentiment::new("/Users/coornail/rust/ircbot/src/wordlist.txt".to_string());
-        assert!(analizer.analyze("Hey you worthless scumbag") == -1.5)
+        let analizer = sentiment::new("/Users/coornail/rust/ircbot/src/wordlist.txt".to_string());
+        assert!(analizer.analyze("Hey you worthless scumbag") == -1.5);
+        assert!(analizer.analyze("I am happy") == 1 as f32);
+        assert!(analizer.analyze("I am so happy") == 0.75);
+        assert!(analizer.analyze("I am extremely happy") == 0.75 as f32);
+        assert!(analizer.analyze("I am really sad") == -0.5 as f32);
     }
 }
