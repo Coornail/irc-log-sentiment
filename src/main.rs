@@ -37,7 +37,7 @@ fn main() {
         let who = get_nick(parts[1]).to_string();
 
         // Skip ignored names.
-        if ["*", "**", "***", "--", "---", "-->", "<--"].contains(&who.as_str()) {
+        if ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"].contains(&who.as_str()) {
             continue;
         }
         i = i+1;
