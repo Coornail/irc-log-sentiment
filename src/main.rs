@@ -9,17 +9,11 @@ include!("./sentiment.rs");
 // - Removes beginning '+' and '@'
 // - Removes trailing '_' and '-'
 fn get_nick(s: &str) -> &str {
-    let mut ret = s.trim();
+    let ignored_prefixes: &[_] = &['+', '@', ' '];
+    let ignored_suffixes: &[_] = &['_', '-', ' '];
 
-    if ret.starts_with("+") || ret.starts_with("@") {
-        ret = &ret[1..ret.len()];
-    }
-
-    if ret.ends_with("_") || ret.ends_with("-") {
-        ret = &ret[0..ret.len()-1]
-    }
-
-    return &ret
+    return &s.trim_left_matches(ignored_prefixes)
+        .trim_right_matches(ignored_suffixes);
 }
 
 fn main() {
