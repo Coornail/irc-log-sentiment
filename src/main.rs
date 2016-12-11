@@ -57,6 +57,9 @@ fn main() {
         result.insert(who, sum_comment_value);
     }
 
-    print!("{:?}\n", result);
-    print!("{} lines analyzed.\n", i);
+    for (key, value) in result {
+        print!("{} {}\n", key, value);
+    }
+
+    print!("\n{} lines analyzed.\n", i);
 }
