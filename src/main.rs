@@ -1,5 +1,5 @@
 use std::io::prelude::*;
-use std::io::{BufReader};
+use std::io::BufReader;
 use std::fs::File;
 use std::collections::HashMap;
 
@@ -37,10 +37,11 @@ fn main() {
         let who = get_nick(parts[1]).to_string();
 
         // Skip ignored names.
-        if ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"].contains(&who.as_str()) {
+        if ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
+            .contains(&who.as_str()) {
             continue;
         }
-        i = i+1;
+        i = i + 1;
 
         // Calculate new comment value.
         let comment_value = analizer.analyze(parts[2]);
