@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
 use std::collections::HashMap;
+use std::env;
 
 include!("./sentiment.rs");
 
@@ -17,7 +18,13 @@ fn get_nick(s: &str) -> &str {
 }
 
 fn main() {
-    let path = "/tmp/log".to_string();
+    // Parse arguments.
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+       panic!("Usage: {} [log file name]", args[0]);
+    }
+    let path = args[1].clone();
+
     let f = match File::open(&path) {
         Err(why) => panic!("Couldn't open {}: {}", path, why),
         Ok(f) => f,
