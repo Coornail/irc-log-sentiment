@@ -5,6 +5,23 @@ use std::collections::HashMap;
 
 include!("./sentiment.rs");
 
+// Gets a normalized nick from a log nick.
+// - Removes beginning '+' and '@'
+// - Removes trailing '_' and '-'
+fn get_nick(s: &str) -> &str {
+    let mut ret = s.trim();
+
+    if ret.starts_with("+") || ret.starts_with("@") {
+        ret = &ret[1..ret.len()];
+    }
+
+    if ret.ends_with("_") || ret.ends_with("-") {
+        ret = &ret[0..ret.len()-1]
+    }
+
+    return &ret
+}
+
 fn main() {
     let path = "/tmp/log".to_string();
     let f = match File::open(&path) {
@@ -23,7 +40,7 @@ fn main() {
         // Parse lines.
         let l = line.unwrap();
         let parts = l.split("\t").collect::<Vec<&str>>();
-        let who = parts[1].to_string();
+        let who = get_nick(parts[1]).to_string();
 
         // Skip ignored names.
         if ["*", "**", "***", "--", "---", "-->", "<--"].contains(&who.as_str()) {
