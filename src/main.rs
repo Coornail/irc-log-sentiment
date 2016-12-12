@@ -33,7 +33,7 @@ fn main() {
 
     let mut result = HashMap::new();
 
-    let analizer = sentiment::new("/Users/coornail/rust/ircbot/src/wordlist.txt".to_string());
+    let analizer = sentiment::new("./src/wordlist.txt".to_string());
 
     let mut i = 0;
 
