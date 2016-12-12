@@ -1,3 +1,4 @@
+
 pub mod sentiment {
     use std::collections::HashMap;
     use std::fs::File;
@@ -54,7 +55,7 @@ mod test {
 
     #[test]
     fn sentiment_test() {
-        let analizer = sentiment::new("/Users/coornail/rust/ircbot/src/wordlist.txt".to_string());
+        let analizer = sentiment::new("./src/wordlist.txt".to_string());
         assert!(analizer.analyze("Hey you worthless scumbag") == -1.5);
         assert!(analizer.analyze("I am happy") == 1 as f32);
         assert!(analizer.analyze("I am so happy") == 0.75);
