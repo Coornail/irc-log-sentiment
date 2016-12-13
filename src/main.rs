@@ -31,37 +31,36 @@ fn main() {
     };
     let f = BufReader::new(f);
 
-    let mut result = HashMap::new();
+    //let mut result = HashMap::new();
 
     let analizer = sentiment::new("./src/wordlist.txt".to_string());
 
-    let mut i = 0;
+    let result = f.lines().map(|line| {
+        let line = line.expect("Couldn't parse line");
 
-    for line in f.lines() {
-        // Parse lines.
-        let l = line.unwrap();
-        let parts = l.split("\t").collect::<Vec<&str>>();
+        let parts = line.split("\t").collect::<Vec<&str>>();
         let who = get_nick(parts[1]).to_string();
-
-        // Skip ignored names.
-        if ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
-            .contains(&who.as_str()) {
-            continue;
-        }
-        i = i + 1;
-
-        // Calculate new comment value.
         let comment_value = analizer.analyze(parts[2]);
-        let sum_comment_value = match result.get(&who) {
-            Some(existing_comment_value) => existing_comment_value + comment_value,
-            None => comment_value,
+
+        return (who, comment_value);
+    }).fold(HashMap::new(), |mut res, curr| {
+        if ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
+            .contains(&curr.0.as_str()) {
+                return res;
+            }
+
+        let val = match res.get(&curr.0) {
+            Some(existing_comment_value) => existing_comment_value + curr.1,
+            None => curr.1,
         };
-        result.insert(who, sum_comment_value);
-    }
+
+        res.insert(curr.0, val);
+        return res;
+    });
 
     for (key, value) in result {
         print!("{} {}\n", key, value);
     }
 
-    print!("\n{} lines analyzed.\n", i);
+    //print!("\n{} lines analyzed.\n", i);
 }
