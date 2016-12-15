@@ -42,7 +42,7 @@ fn main() {
         let who = get_nick(parts[1]).to_string();
         let comment_value = analizer.analyze(parts[2]);
 
-        if ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
+        if comment_value == 0.0 || ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
             .contains(&who.as_str()) {
                 return res;
             }
