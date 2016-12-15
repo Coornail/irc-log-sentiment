@@ -25,7 +25,7 @@ pub mod sentiment {
         }
     }
 
-    pub fn new(path: String) -> Analizer {
+    pub fn new(path: &str) -> Analizer {
         let mut wordlist = HashMap::new();
 
         let f = match File::open(&path) {

@@ -32,7 +32,7 @@ fn main() {
     };
     let f = BufReader::new(f);
 
-    let analizer = sentiment::new("./src/wordlist.txt".to_string());
+    let analizer = sentiment::new("./src/wordlist.txt");
 
     // Fold all lines to a hashmap containing username -> score.
     let result = f.lines().fold(HashMap::new(), |mut res, line| {
