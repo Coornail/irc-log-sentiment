@@ -55,7 +55,7 @@ mod test {
 
     #[test]
     fn sentiment_test() {
-        let analizer = sentiment::new("./src/wordlist.txt".to_string());
+        let analizer = sentiment::new("./src/wordlist.txt");
         assert!(analizer.analyze("Hey you worthless scumbag") == -1.5);
         assert!(analizer.analyze("I am happy") == 1 as f32);
         assert!(analizer.analyze("I am so happy") == 0.75);
