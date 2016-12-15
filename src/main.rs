@@ -25,42 +25,38 @@ fn main() {
     }
     let path = args[1].clone();
 
+    // Read file.
     let f = match File::open(&path) {
         Err(why) => panic!("Couldn't open {}: {}", path, why),
         Ok(f) => f,
     };
     let f = BufReader::new(f);
 
-    //let mut result = HashMap::new();
-
     let analizer = sentiment::new("./src/wordlist.txt".to_string());
 
-    let result = f.lines().map(|line| {
+    // Fold all lines to a hashmap containing username -> score.
+    let result = f.lines().fold(HashMap::new(), |mut res, line| {
         let line = line.expect("Couldn't parse line");
 
         let parts = line.split("\t").collect::<Vec<&str>>();
         let who = get_nick(parts[1]).to_string();
         let comment_value = analizer.analyze(parts[2]);
 
-        return (who, comment_value);
-    }).fold(HashMap::new(), |mut res, curr| {
         if ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
-            .contains(&curr.0.as_str()) {
+            .contains(&who.as_str()) {
                 return res;
             }
 
-        let val = match res.get(&curr.0) {
-            Some(existing_comment_value) => existing_comment_value + curr.1,
-            None => curr.1,
+        let val = match res.get(&who) {
+            Some(existing_comment_value) => existing_comment_value + comment_value,
+            None => comment_value,
         };
 
-        res.insert(curr.0, val);
+        res.insert(who, val);
         return res;
     });
 
     for (key, value) in result {
         print!("{} {}\n", key, value);
     }
-
-    //print!("\n{} lines analyzed.\n", i);
 }
