@@ -21,7 +21,7 @@ fn main() {
     // Parse arguments.
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-       panic!("Usage: {} [log file name]", args[0]);
+        panic!("Usage: {} [log file name]", args[0]);
     }
     let path = args[1].clone();
 
@@ -42,10 +42,11 @@ fn main() {
         let who = get_nick(parts[1]).to_string();
         let comment_value = analizer.analyze(parts[2]);
 
-        if comment_value == 0.0 || ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
+        if comment_value == 0.0 ||
+           ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
             .contains(&who.as_str()) {
-                return res;
-            }
+            return res;
+        }
 
         let val = match res.get(&who) {
             Some(existing_comment_value) => existing_comment_value + comment_value,
