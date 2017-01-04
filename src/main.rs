@@ -4,7 +4,7 @@ use std::fs::File;
 use std::collections::HashMap;
 use std::env;
 
-include!("./sentiment.rs");
+mod sentiment;
 
 // Gets a normalized nick from a log nick.
 // - Removes beginning '+' and '@'
@@ -32,7 +32,7 @@ fn main() {
     };
     let f = BufReader::new(f);
 
-    let analizer = sentiment::new("./src/wordlist.txt");
+    let sent = sentiment::new("./src/wordlist.txt");
 
     // Fold all lines to a hashmap containing username -> score.
     let result = f.lines().fold(HashMap::new(), |mut res, line| {
@@ -40,7 +40,7 @@ fn main() {
 
         let parts = line.split("\t").collect::<Vec<&str>>();
         let who = get_nick(parts[1]).to_string();
-        let comment_value = analizer.analyze(parts[2]);
+        let comment_value = sent.analyze(parts[2]);
 
         if comment_value == 0.0 ||
            ["*", "**", "***", "--", "---", "-->", "<--", "-", "", "<-", "=!=", "<"]
